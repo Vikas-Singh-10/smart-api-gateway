@@ -1,7 +1,10 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { GatewayConfig, GatewayConfigSchema } from './schemas/gateway-config.schema';
+import {
+  GatewayConfig,
+  GatewayConfigSchema,
+} from './schemas/gateway-config.schema';
 
 @Module({
   imports: [

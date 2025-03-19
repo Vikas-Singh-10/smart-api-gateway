@@ -3,13 +3,8 @@ import { GatewayModule } from './gateway/gateway.module';
 import { DatabaseModule } from './database/database.module';
 import { RedisModule } from './redis/redis.module';
 
-
 @Module({
-  imports: [
-    GatewayModule,
-    DatabaseModule,
-    RedisModule
-  ],
+  imports: [GatewayModule, DatabaseModule, RedisModule],
   controllers: [],
   providers: [],
 })

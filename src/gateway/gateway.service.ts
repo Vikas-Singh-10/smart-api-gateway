@@ -12,14 +12,15 @@ export class GatewayService {
 
   async requestToGateway(gatewayName: string, endpoint: string, data: any) {
     // Retrieve configuration from DB (with decrypted apiKey)
-    const config = await this.gatewayConfigService.getGatewayConfig(gatewayName);
+    const config =
+      await this.gatewayConfigService.getGatewayConfig(gatewayName);
     const targetUrl = `${config.url}/${endpoint}`;
 
     try {
       const response = await firstValueFrom(
         this.httpService.post(targetUrl, data, {
-          headers: { 'Authorization': `Bearer ${config.apiKey}` },
-        })
+          headers: { Authorization: `Bearer ${config.apiKey}` },
+        }),
       );
       return response.data;
     } catch (error) {

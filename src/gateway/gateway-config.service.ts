@@ -8,7 +8,8 @@ import { encrypt, decrypt } from '../utils/crypto.util';
 @Injectable()
 export class GatewayConfigService {
   constructor(
-    @InjectModel(GatewayConfig.name) private readonly gatewayModel: Model<GatewayConfig>,
+    @InjectModel(GatewayConfig.name)
+    private readonly gatewayModel: Model<GatewayConfig>,
     private readonly cacheService: CacheService,
   ) {}
 
@@ -16,7 +17,8 @@ export class GatewayConfigService {
     const cacheKey = `gateway-config:${gatewayName}`;
 
     // Check Redis cache first.
-    const cachedConfig = await this.cacheService.getCache<GatewayConfig>(cacheKey);
+    const cachedConfig =
+      await this.cacheService.getCache<GatewayConfig>(cacheKey);
     if (cachedConfig) {
       // Decrypt the apiKey before returning
       cachedConfig.apiKey = decrypt(cachedConfig.apiKey);
@@ -25,9 +27,13 @@ export class GatewayConfigService {
     }
 
     // Fallback: query MongoDB if not in cache.
-    const gateway = await this.gatewayModel.findOne({ name: gatewayName }).exec();
+    const gateway = await this.gatewayModel
+      .findOne({ name: gatewayName })
+      .exec();
     if (!gateway) {
-      throw new NotFoundException(`Gateway configuration for ${gatewayName} not found`);
+      throw new NotFoundException(
+        `Gateway configuration for ${gatewayName} not found`,
+      );
     }
 
     // Decrypt apiKey before caching and returning.
@@ -37,7 +43,9 @@ export class GatewayConfigService {
   }
 
   // Create or update gateway configuration with encrypted apiKey.
-  async createGatewayConfig(config: Partial<GatewayConfig>): Promise<GatewayConfig> {
+  async createGatewayConfig(
+    config: Partial<GatewayConfig>,
+  ): Promise<GatewayConfig> {
     // Encrypt the API key before saving.
     if (config.apiKey) {
       config.apiKey = encrypt(config.apiKey);
@@ -45,7 +53,11 @@ export class GatewayConfigService {
     const newConfig = new this.gatewayModel(config);
     const savedConfig = await newConfig.save();
     // Cache the configuration after creation.
-    await this.cacheService.setCache(`gateway-config:${savedConfig.name}`, savedConfig, 3600);
+    await this.cacheService.setCache(
+      `gateway-config:${savedConfig.name}`,
+      savedConfig,
+      3600,
+    );
     // Decrypt before returning so that caller receives the plain API key.
     savedConfig.apiKey = decrypt(savedConfig.apiKey);
     return savedConfig;
