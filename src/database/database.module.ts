@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GatewayConfig, GatewayConfigSchema } from './schemas/gateway-config.schema';
-import { DatabaseService } from './database.service';
 
 @Module({
   imports: [
@@ -27,7 +26,6 @@ import { DatabaseService } from './database.service';
       { name: GatewayConfig.name, schema: GatewayConfigSchema },
     ]),
   ],
-  providers: [DatabaseService],
   exports: [MongooseModule],
 })
 export class DatabaseModule {}
