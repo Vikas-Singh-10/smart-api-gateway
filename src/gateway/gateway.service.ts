@@ -14,7 +14,7 @@ export class GatewayService {
     // Retrieve configuration from DB (with decrypted apiKey)
     const config =
       await this.gatewayConfigService.getGatewayConfig(gatewayName);
-    const targetUrl = `${config.url}/${endpoint}`;
+    const targetUrl = `${config.baseUrl}/${endpoint}`;
 
     try {
       const response = await firstValueFrom(
