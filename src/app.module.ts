@@ -1,9 +1,15 @@
 import { Module } from '@nestjs/common';
-import { MetricsModule } from './metrics/metrics.module';
-// import other modules as needed
+import { GatewayModule } from './gateway/gateway.module';
+import { DatabaseModule } from './database/database.module';
+import { RedisModule } from './redis/redis.module';
+
 
 @Module({
-  imports: [MetricsModule],
+  imports: [
+    GatewayModule,
+    DatabaseModule,
+    RedisModule
+  ],
   controllers: [],
   providers: [],
 })
