@@ -9,4 +9,5 @@ export default () => ({
   },
   ENCRYPTION_KEY: process.env.ENCRYPTION_KEY || 'default-encryption-key',
   ENCRYPTION_IV: process.env.ENCRYPTION_IV || 'default-encryption-iv',
+  AI_MODEL_PATH: process.env.AI_MODEL_PATH || './model',
 });

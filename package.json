@@ -17,7 +17,9 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "train-model": "ts-node src/ai-routing/model-trainer.ts",
+    "register-services": "ts-node scripts/register-services.ts"
   },
   "dependencies": {
     "@nestjs/axios": "^4.0.0",
@@ -28,6 +30,7 @@
     "@nestjs/platform-express": "^11.0.1",
     "@tensorflow/tfjs-node": "^4.22.0",
     "axios": "^1.8.3",
+    "class-validator": "^0.14.1",
     "ioredis": "^5.6.0",
     "mongoose": "^8.12.1",
     "reflect-metadata": "^0.2.2",

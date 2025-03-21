@@ -1,10 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import {
-  GatewayConfig,
-  GatewayConfigSchema,
-} from './schemas/gateway-config.schema';
+import { Gateway, GatewaySchema } from './schemas/Gateway.schema';
 
 @Module({
   imports: [
@@ -26,9 +23,7 @@ import {
       }),
       inject: [ConfigService],
     }),
-    MongooseModule.forFeature([
-      { name: GatewayConfig.name, schema: GatewayConfigSchema },
-    ]),
+    MongooseModule.forFeature([{ name: Gateway.name, schema: GatewaySchema }]),
   ],
   exports: [MongooseModule],
 })

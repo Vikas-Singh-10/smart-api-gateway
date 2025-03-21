@@ -1,24 +1,62 @@
 # Smart API Gateway
 
-A modern, intelligent API Gateway built with NestJS that leverages AI for smart routing, monitoring, and management of API endpoints.
+A modern, intelligent API Gateway built with NestJS that leverages AI for smart routing, circuit breaking, and efficient microservice management.
 
 ## 🌟 Features
 
-- **AI-Powered Routing**: Intelligent request routing based on AI analysis of incoming requests
-- **Real-time Metrics**: Comprehensive monitoring and analytics dashboard
-- **Smart Gateway**: Advanced API gateway capabilities with automatic request handling
-- **Dashboard Interface**: Visual management and monitoring interface
+- **AI-Powered Routing**: TensorFlow.js model analyzes requests to determine optimal service routing
+- **Circuit Breaking**: Prevents cascading failures by detecting and isolating failing services
+- **Service Discovery**: Dynamically registers and discovers microservice instances
+- **Redis Caching**: Improves performance with distributed caching
+- **MongoDB Integration**: Stores service configurations and metrics
+- **Intelligent Load Balancing**: Routes to the most appropriate service based on region and health
+- **Monitoring**: Real-time metrics and performance monitoring
 
-## 🏗️ Project Structure
+## 🏗️ Architecture
+
+The Smart API Gateway consists of several interconnected modules:
 
 ```
 src/
-├── ai-routing/     # AI-based routing logic and models
-├── gateway/        # Core API gateway functionality
-├── metrics/        # Metrics collection and monitoring
-├── dashboard/      # Dashboard UI and management interface
-└── main.ts        # Application entry point
+├── ai-routing/        # TensorFlow-based intelligent request analysis
+├── api/               # API controllers that handle incoming requests
+├── cache/             # Caching layer for improved performance
+├── circuit-breaker/   # Service reliability and failure isolation
+├── config/            # Application configuration
+├── database/          # MongoDB schemas and connections
+├── gateway/           # Core gateway routing functionality
+├── microservices/     # Service registration and discovery
+├── monitoring/        # Performance metrics and monitoring
+├── redis/             # Redis connection management
+└── utils/             # Shared utilities and helpers
 ```
+
+## 🔄 Request Flow
+
+1. **Request Entry**
+   - Client makes a request to `/api/*`
+   - `ApiController` handles the request and forwards to `SmartGatewayService`
+
+2. **AI Service Selection**
+   - `AiRoutingService` uses TensorFlow to analyze the request
+   - Determines the appropriate service category (payment, order, user, product)
+
+3. **Instance Selection**
+   - `MicroservicesService` selects the best service instance based on:
+     - Service type (from AI analysis)
+     - Geographic region
+     - Health metrics
+     - Priority settings
+
+4. **Circuit Breaking**
+   - `CircuitBreakerService` checks if the selected service is healthy
+   - Prevents calls to failing services
+   - Manages recovery and testing of services
+
+5. **Request Forwarding**
+   - Request is forwarded to the selected service
+   - Response is returned to the client
+   - Metrics are recorded for future routing decisions
 
 ## 🚀 Getting Started
 
@@ -26,7 +64,8 @@ src/
 
 - Node.js (v18 or higher)
 - npm or yarn
-- TypeScript
+- MongoDB
+- Redis
 
 ### Installation
 
@@ -44,10 +83,22 @@ npm install
 3. Configure environment variables:
 ```bash
 cp .env.example .env
-# Edit .env with your configuration
+# Edit .env with your configuration:
+# MONGO_URI=mongodb://localhost:27017
+# MONGO_DB_NAME=smart-api-gateway
+# REDIS_HOST=localhost
+# REDIS_PORT=6379
+# PORT=3000
+# ENCRYPTION_KEY=your-encryption-key
+# AI_MODEL_PATH=./model
 ```
 
-4. Start the development server:
+4. Register service instances:
+```bash
+npm run register-services
+```
+
+5. Start the development server:
 ```bash
 npm run start:dev
 ```
@@ -61,38 +112,69 @@ The application will be available at `http://localhost:3000`
 - `npm run start` - Start the application
 - `npm run start:dev` - Start the application in watch mode
 - `npm run build` - Build the application
+- `npm run register-services` - Register microservice instances
 - `npm run test` - Run tests
-- `npm run test:e2e` - Run end-to-end tests
 - `npm run lint` - Lint the code
 
-## 📚 API Documentation
+## 📚 API Usage
 
-The API documentation is available at `/api-docs` when running the application in development mode.
+### Service Registration
 
-### Key Endpoints
+Register a new service instance:
 
-- `/` - Health check endpoint
-- `/metrics` - System metrics and monitoring
-- `/dashboard` - Management dashboard interface
-- `/gateway/*` - API gateway endpoints
+```bash
+curl -X POST http://localhost:3000/microservices/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "payment-service-01",
+    "type": "payment",
+    "url": "https://payment-api.example.com",
+    "region": "us-east-1",
+    "apiKey": "your-api-key",
+    "priority": 10,
+    "isActive": true
+  }'
+```
 
-## 🔒 Security
+### Making API Requests
 
-This project implements several security best practices:
-- Request validation
-- Rate limiting
-- Authentication and authorization
-- Input sanitization
-- CORS protection
+All requests to your microservices are routed through:
 
-## 📊 Monitoring and Metrics
+```bash
+curl -X ANY http://localhost:3000/api/your-endpoint \
+  -H "X-Region: us-east-1" \
+  -H "Content-Type: application/json" \
+  -d '{"your": "payload"}'
+```
 
-The system provides real-time monitoring and metrics through:
-- Performance metrics
-- Request/response timing
-- Error rates
-- System health indicators
-- AI routing decisions
+The gateway will:
+1. Analyze the request using AI
+2. Select the appropriate service
+3. Forward the request
+4. Return the response
+
+## 🔧 Configuration
+
+### AI Model
+
+- The AI model is stored in the `model` directory
+- Initial model is created automatically if not found
+- Can be trained with real traffic patterns for improved accuracy
+
+### Circuit Breaker
+
+Configure circuit breaker settings:
+
+```bash
+curl -X POST http://localhost:3000/circuit-breaker/configure \
+  -H "Content-Type: application/json" \
+  -d '{
+    "serviceId": "payment-service-01",
+    "failureThreshold": 5,
+    "resetTimeout": 30000,
+    "failureWindow": 60000
+  }'
+```
 
 ## 🤝 Contributing
 
@@ -112,4 +194,4 @@ For support, please open an issue in the GitHub repository or contact the mainta
 
 ---
 
-Built with ❤️ using NestJS
+Built with ❤️ using NestJS, TensorFlow.js, MongoDB and Redis

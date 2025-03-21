@@ -1,0 +1,67 @@
+[
+  {
+    "input": "order, status",
+    "expected": "order-gateway",
+    "predicted": "order-gateway",
+    "correct": true,
+    "probabilities": [
+      "0.1466",
+      "0.3031",
+      "0.2294",
+      "0.1345",
+      "0.1864"
+    ]
+  },
+  {
+    "input": "payment, process",
+    "expected": "payment-gateway",
+    "predicted": "payment-gateway",
+    "correct": true,
+    "probabilities": [
+      "0.3240",
+      "0.2271",
+      "0.0954",
+      "0.2441",
+      "0.1093"
+    ]
+  },
+  {
+    "input": "user, profile",
+    "expected": "user-gateway",
+    "predicted": "user-gateway",
+    "correct": true,
+    "probabilities": [
+      "0.1531",
+      "0.2503",
+      "0.2770",
+      "0.1735",
+      "0.1461"
+    ]
+  },
+  {
+    "input": "product, search",
+    "expected": "product-gateway",
+    "predicted": "product-gateway",
+    "correct": true,
+    "probabilities": [
+      "0.1825",
+      "0.1507",
+      "0.1121",
+      "0.4497",
+      "0.1051"
+    ]
+  },
+  {
+    "input": "help, unknown",
+    "expected": "default-gateway",
+    "predicted": "order-gateway",
+    "correct": false,
+    "probabilities": [
+      "0.1667",
+      "0.2705",
+      "0.2261",
+      "0.1584",
+      "0.1783"
+    ]
+  }
+]

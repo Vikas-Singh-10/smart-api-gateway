@@ -3,23 +3,27 @@ import { HttpModule } from '@nestjs/axios';
 import { MongooseModule } from '@nestjs/mongoose';
 import { GatewayController } from './gateway.controller';
 import { GatewayService } from './gateway.service';
-import { GatewayConfigService } from './gateway-config.service';
-import {
-  GatewayConfig,
-  GatewayConfigSchema,
-} from '../database/schemas/gateway-config.schema';
+import { SmartGatewayService } from './smart-gateway.service';
+import { Gateway, GatewaySchema } from '../database/schemas/Gateway.schema';
+import { AiRoutingModule } from '../ai-routing/ai-routing.module';
+import { CircuitBreakerModule } from '../circuit-breaker/circuit-breaker.module';
+import { MonitoringModule } from '../monitoring/monitoring.module';
+import { MicroservicesModule } from '../microservices/microservices.module';
 
 @Module({
   imports: [
     // Provides HttpService for making HTTP requests to external gateways
     HttpModule,
-    // Registers the GatewayConfig schema so that the GatewayConfigService can query the DB.
-    MongooseModule.forFeature([
-      { name: GatewayConfig.name, schema: GatewayConfigSchema },
-    ]),
+    // Registers the Gateway schema
+    MongooseModule.forFeature([{ name: Gateway.name, schema: GatewaySchema }]),
+    // Import required modules for smart gateway
+    AiRoutingModule,
+    CircuitBreakerModule,
+    MonitoringModule,
+    MicroservicesModule,
   ],
   controllers: [GatewayController],
-  providers: [GatewayService, GatewayConfigService],
-  exports: [GatewayService],
+  providers: [GatewayService, SmartGatewayService],
+  exports: [GatewayService, SmartGatewayService],
 })
 export class GatewayModule {}
