@@ -71,7 +71,7 @@ src/
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/smart-api-gateway.git
+git clone https://github.com/Vikas-Singh-10/smart-api-gateway/
 cd smart-api-gateway
 ```
 
