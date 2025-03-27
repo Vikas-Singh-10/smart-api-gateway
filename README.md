@@ -118,24 +118,6 @@ The application will be available at `http://localhost:3000`
 
 ## 📚 API Usage
 
-### Service Registration
-
-Register a new service instance:
-
-```bash
-curl -X POST http://localhost:3000/microservices/register \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "payment-service-01",
-    "type": "payment",
-    "url": "https://payment-api.example.com",
-    "region": "us-east-1",
-    "apiKey": "your-api-key",
-    "priority": 10,
-    "isActive": true
-  }'
-```
-
 ### Making API Requests
 
 All requests to your microservices are routed through:
@@ -153,6 +135,32 @@ The gateway will:
 3. Forward the request
 4. Return the response
 
+### Admin Endpoints
+
+#### Health Check
+```bash
+curl -X GET http://localhost:3000/api/admin/health
+```
+
+#### Reset Circuit Breaker
+```bash
+curl -X POST http://localhost:3000/api/admin/reset-circuit/payment-service-01
+```
+
+### Service Registration
+
+Service registration is handled through the `register-services` script:
+
+```bash
+npm run register-services
+```
+
+This script registers the following service instances:
+- Payment Services (us-east, us-west, eu-west)
+- Order Services (us-east, eu-west)
+- User Services (us-east, us-west)
+- Product Services (us-east, eu-west)
+
 ## 🔧 Configuration
 
 ### AI Model
@@ -163,18 +171,10 @@ The gateway will:
 
 ### Circuit Breaker
 
-Configure circuit breaker settings:
-
-```bash
-curl -X POST http://localhost:3000/circuit-breaker/configure \
-  -H "Content-Type: application/json" \
-  -d '{
-    "serviceId": "payment-service-01",
-    "failureThreshold": 5,
-    "resetTimeout": 30000,
-    "failureWindow": 60000
-  }'
-```
+Circuit breaker settings are configured through the service registration process. The default settings are:
+- Failure Threshold: 5
+- Reset Timeout: 30 seconds
+- Failure Window: 60 seconds
 
 ## 🤝 Contributing
 
